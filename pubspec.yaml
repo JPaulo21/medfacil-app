@@ -38,6 +38,7 @@ dependencies:
   google_fonts: ^6.2.0
   outline_gradient_button: ^2.0.1+1
   gradient_elevated_button : ^0.0.5
+  gradient_icon: ^2.0.9
 
 dev_dependencies:
   flutter_test:
