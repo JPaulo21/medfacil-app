@@ -25,9 +25,9 @@ class _UserRegisterPage extends State<UserRegisterPage> {
 
   final _formKey = GlobalKey<FormState>();
 
-  goLoginPage() {
+  goLoginPage(bool userCreated) {
     Navigator.push(context, MaterialPageRoute(
-      builder: (_) => const LoginPage(),
+      builder: (_) => LoginPage(userCreated: userCreated),
     ));
   }
 
@@ -61,7 +61,7 @@ class _UserRegisterPage extends State<UserRegisterPage> {
                         children: <Widget>[
                           const Image(
                               image:
-                                  AssetImage('assets/images/icons8_user.png')
+                                  AssetImage('assets/images/user_register/icons8_user.png')
                           ),
                           Expanded(
                             child: TextFormField(
@@ -88,7 +88,7 @@ class _UserRegisterPage extends State<UserRegisterPage> {
                         children: <Widget>[
                           const Image(
                               image: AssetImage(
-                                  'assets/images/icons8-calendario.png')),
+                                  'assets/images/user_register/icons8-calendario.png')),
                           Expanded(
                             child: TextFormField(
                                 validator: (value){
@@ -115,7 +115,7 @@ class _UserRegisterPage extends State<UserRegisterPage> {
                         children: <Widget>[
                           const Image(
                               image:
-                                  AssetImage('assets/images/icons8-sex.png')),
+                                  AssetImage('assets/images/user_register/icons8-sex.png')),
                           ValueListenableBuilder(
                               valueListenable: dropValue,
                               builder: (BuildContext context, String value, _) {
@@ -126,12 +126,12 @@ class _UserRegisterPage extends State<UserRegisterPage> {
                                       dropValue.value = value.toString(),
                                   items: const [
                                     DropdownMenuItem(
-                                      value: "Masculino",
-                                      child: Text('M'),
+                                      value: 'M',
+                                      child: Text("Masculino"),
                                     ),
                                     DropdownMenuItem(
-                                      value: "Feminino",
-                                      child: Text('F'),
+                                      value: 'F',
+                                      child: Text('Feminino'),
                                     )
                                   ],
                                 );
@@ -147,7 +147,7 @@ class _UserRegisterPage extends State<UserRegisterPage> {
                         children: <Widget>[
                           const Image(
                               image: AssetImage(
-                                  'assets/images/icons8-passe-de-seguranca.png')),
+                                  'assets/images/user_register/icons8-passe-de-seguranca.png')),
                           Expanded(
                             child: TextFormField(
                                 validator: (value){
@@ -173,7 +173,7 @@ class _UserRegisterPage extends State<UserRegisterPage> {
                         children: <Widget>[
                           const Image(
                               image: AssetImage(
-                                  'assets/images/icons8-mobile-72.png')),
+                                  'assets/images/user_register/icons8-mobile-72.png')),
                           Expanded(
                             child: TextFormField(
                                 validator: (value){
@@ -199,7 +199,7 @@ class _UserRegisterPage extends State<UserRegisterPage> {
                         children: <Widget>[
                           const Image(
                               image: AssetImage(
-                                  'assets/images/icons8-e-mail-72.png')),
+                                  'assets/images/user_register/icons8-e-mail-72.png')),
                           Expanded(
                             child: TextFormField(
                                 validator: (value){
@@ -239,17 +239,23 @@ class _UserRegisterPage extends State<UserRegisterPage> {
                     GradientElevatedButton(
                       onPressed: () {
                         if(_formKey.currentState!.validate()){
-                          User user = User();
-                          user.name = nameController.text;
-                          user.birthDate = birthController.text;
-                          user.sex = 'M';
-                          user.cpf = cpfController.text;
-                          user.ddi = '+55';
-                          user.ddd = phoneNumberController.text.substring(0,3);
-                          user.phoneNumber = phoneNumberController.text.substring(3, phoneNumberController.text.length);
-                          user.email = emailController.text;
-                          userService.createUser(user);
-                          goLoginPage();
+                          User user = User(
+                            name: nameController.text,
+                            birthDate: birthController.text,
+                            sex: dropValue.value,
+                            cpf: cpfController.text,
+                            ddi: '+55',
+                            ddd: phoneNumberController.text.substring(0,3),
+                            phoneNumber: phoneNumberController.text.substring(3, phoneNumberController.text.length),
+                            email: emailController.text
+                          );
+                          userService.createUser(user).then((userCreated) {
+                            print('UserRegisterPage');
+                            if (userCreated) {
+                              print('goLoginPage');
+                              goLoginPage(userCreated);
+                            }
+                          });
                         }
                       },
                       style: GradientElevatedButton.styleFrom(

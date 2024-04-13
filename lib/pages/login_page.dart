@@ -2,9 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:gradient_elevated_button/gradient_elevated_button.dart';
+import 'package:toastification/toastification.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  final bool? userCreated;
+
+  const LoginPage({super.key, this.userCreated = false});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -18,6 +21,23 @@ class _LoginPageState extends State<LoginPage> {
   FocusNode digito2 = FocusNode();
   FocusNode digito3 = FocusNode();
   FocusNode digito4 = FocusNode();
+
+  @override
+  void initState(){
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      if(widget.userCreated == true){
+        toastification.show(
+          context: context,
+          type: ToastificationType.success,
+          style: ToastificationStyle.flatColored,
+          autoCloseDuration: const Duration(seconds: 7),
+          title: Text('Cadastro Realizado com sucesso!'),
+          description: RichText(text: const TextSpan(text: 'Faça seu Login', style: TextStyle(color: Colors.black)))
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +74,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: Padding(
                           padding: const EdgeInsets.only(left: 5.0, right: 5.0),
                           child: TextFormField(
-                            autofocus: true,
+                            //autofocus: true,
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
@@ -160,6 +180,7 @@ class _LoginPageState extends State<LoginPage> {
                 GradientElevatedButton(
                   onPressed: () {
                     //TODO: Implementar Login
+
                   },
                   style: GradientElevatedButton.styleFrom(
                     gradient: const LinearGradient(
@@ -168,7 +189,7 @@ class _LoginPageState extends State<LoginPage> {
                       end: Alignment.centerRight,
                     ),
                   ),
-                  child: const Text("Enviar Código",
+                  child: const Text("Receber Código",
                       style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.w600,
