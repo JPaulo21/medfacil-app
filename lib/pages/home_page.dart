@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gradient_elevated_button/gradient_elevated_button.dart';
+import 'package:medfacil_app/pages/login_page.dart';
 import 'package:medfacil_app/pages/user_register_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -11,9 +12,15 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
-  goRegisterUser() {
+  goRegisterUserPage() {
     Navigator.push(context, MaterialPageRoute(
         builder: (_) => const UserRegisterPage(),
+    ));
+  }
+
+  goLoginPage() {
+    Navigator.push(context, MaterialPageRoute(
+      builder: (_) => const LoginPage(),
     ));
   }
 
@@ -40,7 +47,7 @@ class _HomePageState extends State<HomePage> {
               child: GradientElevatedButton(
               onPressed: () {
                 //TODO: Implementar Login
-
+                goLoginPage();
               },
               style: GradientElevatedButton.styleFrom(
                 gradient: const LinearGradient(colors: [
@@ -57,7 +64,7 @@ class _HomePageState extends State<HomePage> {
             const Spacer(),
             Flexible(
               flex: 14,
-              child: TextButton(onPressed: () => goRegisterUser(), child: const Text('Cadastrar', style: TextStyle(decoration: TextDecoration.underline, fontSize: 20, fontWeight: FontWeight.w600),)))
+              child: TextButton(onPressed: () => goRegisterUserPage(), child: const Text('Cadastrar', style: TextStyle(decoration: TextDecoration.underline, fontSize: 20, fontWeight: FontWeight.w600),)))
           ],
         ),
       ),
