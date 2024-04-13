@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:gradient_elevated_button/gradient_elevated_button.dart';
-import 'package:medfacil_app/pages/home_page.dart';
+import 'package:medfacil_app/pages/login_page.dart';
 import 'package:medfacil_app/services/user_service.dart';
 
 import '../models/user.dart';
@@ -26,9 +25,9 @@ class _UserRegisterPage extends State<UserRegisterPage> {
 
   final _formKey = GlobalKey<FormState>();
 
-  goHomePage() {
+  goLoginPage() {
     Navigator.push(context, MaterialPageRoute(
-      builder: (_) => const HomePage(),
+      builder: (_) => const LoginPage(),
     ));
   }
 
@@ -239,7 +238,6 @@ class _UserRegisterPage extends State<UserRegisterPage> {
                     ),
                     GradientElevatedButton(
                       onPressed: () {
-                        //TODO: Implementar Login
                         if(_formKey.currentState!.validate()){
                           User user = User();
                           user.name = nameController.text;
@@ -251,7 +249,7 @@ class _UserRegisterPage extends State<UserRegisterPage> {
                           user.phoneNumber = phoneNumberController.text.substring(3, phoneNumberController.text.length);
                           user.email = emailController.text;
                           userService.createUser(user);
-                          goHomePage();
+                          goLoginPage();
                         }
                       },
                       style: GradientElevatedButton.styleFrom(
