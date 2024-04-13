@@ -1,18 +1,22 @@
-import 'dart:convert';
-
-import 'package:http/http.dart' as http;
+import 'package:medfacil_app/api/user_api.dart';
 
 import '../models/user.dart';
+import '../util/local_storage.dart';
 
 class UserService{
-  static const String resourceUser = 'http://192.168.0.107:8080/api/v1/users';
 
-  createUser(User user) async{
-    final uri = Uri.parse(resourceUser);
-    Map<String, String> userHeader = {"Content-type": "application/json", "Accept": "application/json"};
-    final userJson = jsonEncode(user.toJson());
-    final response = await http.post(uri,body: userJson, headers: userHeader);
-    print(response.body);
+  UserAPI userAPI = UserAPI();
+
+  Future<bool> createUser(User user) async {
+    var response = await userAPI.createUser(user);
+    print('Response: ${response}');
+    if(response == 201){
+      print('cpf ${user.cpf}');
+      LocalStorage.add(key: "cpf", value: user.cpf);
+      print("chegou");
+      return true;
+    }
+    return false;
   }
 
 }
