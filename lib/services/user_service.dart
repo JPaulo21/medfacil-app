@@ -9,11 +9,8 @@ class UserService{
 
   Future<bool> createUser(User user) async {
     var response = await userAPI.createUser(user);
-    print('Response: ${response}');
     if(response == 201){
-      print('cpf ${user.cpf}');
       LocalStorage.add(key: "cpf", value: user.cpf);
-      print("chegou");
       return true;
     }
     return false;
