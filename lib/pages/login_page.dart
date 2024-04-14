@@ -1,7 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:gradient_elevated_button/gradient_elevated_button.dart';
+import 'package:medfacil_app/services/auth_service.dart';
+import 'package:medfacil_app/services/notification_service.dart';
+import 'package:medfacil_app/util/local_storage.dart';
 import 'package:toastification/toastification.dart';
 
 class LoginPage extends StatefulWidget {
@@ -22,16 +23,23 @@ class _LoginPageState extends State<LoginPage> {
   FocusNode digito3 = FocusNode();
   FocusNode digito4 = FocusNode();
 
+  NotificationService notificationService = NotificationService();
+  AuthService authService = AuthService();
+
+  late Future<bool> futureInitializeNotificationsChannel;
+
   @override
   void initState(){
     super.initState();
+    futureInitializeNotificationsChannel = notificationService.initializeNotificationsChannel();
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       if(widget.userCreated == true){
         toastification.show(
           context: context,
           type: ToastificationType.success,
           style: ToastificationStyle.flatColored,
-          autoCloseDuration: const Duration(seconds: 7),
+          autoCloseDuration: const Duration(seconds: 5),
+          showProgressBar: false,
           title: Text('Cadastro Realizado com sucesso!'),
           description: RichText(text: const TextSpan(text: 'Faça seu Login', style: TextStyle(color: Colors.black)))
         );
@@ -178,9 +186,16 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 GradientElevatedButton(
-                  onPressed: () {
-                    //TODO: Implementar Login
-
+                  onPressed: () async{
+                    String? cpf = await LocalStorage.getValue(key: 'cpf');
+                    print(cpf);
+                    if(cpf != null){
+                      authService.requestCode(cpf).then((code) {
+                          if (code != null)
+                            notificationService.showNotification(code);
+                        }
+                      );
+                    }
                   },
                   style: GradientElevatedButton.styleFrom(
                     gradient: const LinearGradient(
