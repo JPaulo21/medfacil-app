@@ -250,9 +250,7 @@ class _UserRegisterPage extends State<UserRegisterPage> {
                             email: emailController.text
                           );
                           userService.createUser(user).then((userCreated) {
-                            print('UserRegisterPage');
                             if (userCreated) {
-                              print('goLoginPage');
                               goLoginPage(userCreated);
                             }
                           });
